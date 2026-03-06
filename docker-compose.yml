@@ -1,0 +1,66 @@
+# OrderManager - Full stack với Docker Compose
+# Chạy: docker compose up -d --build
+# Truy cập: Frontend http://localhost:3000 | Backend API http://localhost:8080
+# Cloudinary: Tạo file .env với NEXT_PUBLIC_CLOUDINARY_* rồi docker compose up --build
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: ordermanager-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ordermanager
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: ordermanager-backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/ordermanager
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      APP_FRAUD_DETECTOR_URL: http://video-fraud-detector:8001
+      APP_FRAUD_DETECTOR_CALLBACK_BASE_URL: http://backend:8080
+    ports:
+      - "8080:8080"
+
+  video-fraud-detector:
+    build:
+      context: ./video-fraud-detector
+      dockerfile: Dockerfile
+    container_name: ordermanager-fraud-detector
+    ports:
+      - "8001:8001"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: http://localhost:8080/api
+        NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: dgsb1shxa
+        NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET: video_kiemhang
+    container_name: ordermanager-frontend
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8080/api
+
+volumes:
+  postgres_data:
