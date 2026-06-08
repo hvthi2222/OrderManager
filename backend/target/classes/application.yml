@@ -1,0 +1,51 @@
+spring:
+  application:
+    name: OrderManager
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ordermanager
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        default_batch_fetch_size: 100
+  open-in-view: false
+
+  servlet:
+    multipart:
+      max-file-size: 500MB
+      max-request-size: 500MB
+
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Ho_Chi_Minh
+
+server:
+  port: 8080
+
+# JWT Configuration
+app:
+  jwt:
+    secret: OrderManagerSecretKey2026VeryLongSecretKeyForJWTSigningMustBeAtLeast256Bits
+    expiration-ms: 86400000  # 24 hours
+
+  # Video storage
+  video:
+    upload-dir: ./uploads/videos
+    retention-days: 15
+
+  # Fraud detector (async video analysis)
+  fraud-detector:
+    url: http://localhost:8001
+    callback-base-url: http://localhost:8080
+    enabled: true

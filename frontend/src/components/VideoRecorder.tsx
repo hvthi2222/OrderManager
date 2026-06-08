@@ -47,14 +47,16 @@ export default function VideoRecorder({
     // Start camera
     const startCamera = useCallback(async () => {
         try {
+            if (!navigator.mediaDevices?.getUserMedia) {
+                toast.error("Trình duyệt không hỗ trợ camera (getUserMedia). Vui lòng dùng Chrome mới nhất.");
+                return;
+            }
+
             const mediaStream = await navigator.mediaDevices.getUserMedia({
                 video: { facingMode: "environment", width: { ideal: 1280 }, height: { ideal: 720 } },
                 audio: false,
             });
             setStream(mediaStream);
-            if (videoRef.current) {
-                videoRef.current.srcObject = mediaStream;
-            }
         } catch (err) {
             toast.error("Không thể truy cập camera. Vui lòng cấp quyền.");
         }
@@ -183,10 +185,23 @@ export default function VideoRecorder({
         if (recordedUrl) URL.revokeObjectURL(recordedUrl);
         setRecordedUrl(null);
         setDuration(0);
-        if (videoRef.current && stream) {
-            videoRef.current.srcObject = stream;
-        }
     }, [recordedUrl, stream]);
+
+    // Ensure video element always shows current stream when available
+    useEffect(() => {
+        if (!videoRef.current || !stream || recordedUrl) return;
+
+        videoRef.current.srcObject = stream;
+        videoRef.current.muted = true;
+        videoRef.current.playsInline = true;
+        const play = () => {
+            const v = videoRef.current;
+            if (v && v.srcObject) v.play().catch(() => {});
+        };
+        videoRef.current.onloadedmetadata = play;
+        videoRef.current.oncanplay = play;
+        play();
+    }, [stream, recordedUrl]);
 
     // Cleanup on unmount
     useEffect(() => {
@@ -237,11 +252,13 @@ export default function VideoRecorder({
                         />
                     ) : (
                         <video
+                            key={stream?.id ?? "live"}
                             ref={videoRef}
                             autoPlay
                             muted
                             playsInline
-                            className="w-full h-full object-cover mirror"
+                            className="w-full h-full min-h-[200px] object-cover mirror"
+                            style={{ display: "block" }}
                         />
                     )}
 

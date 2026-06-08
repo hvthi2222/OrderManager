@@ -139,6 +139,9 @@ public class OrderService {
 
         try {
             List<Order> parsedOrders = parserFactory.getParser(platform).parse(file);
+            if (parsedOrders.isEmpty()) {
+                throw new BusinessException("Không tìm thấy đơn hợp lệ trong file import. Vui lòng kiểm tra lại header và dữ liệu từ TikTok Shop.");
+            }
 
             for (int i = 0; i < parsedOrders.size(); i++) {
                 Order order = parsedOrders.get(i);

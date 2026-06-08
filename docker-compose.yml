@@ -1,11 +1,7 @@
-# OrderManager - Full stack với Docker Compose
-# Chạy: docker compose up -d --build
-# Truy cập: Frontend http://localhost:3000 | Backend API http://localhost:8080
-# Cloudinary: Tạo file .env với NEXT_PUBLIC_CLOUDINARY_* rồi docker compose up --build
 
 services:
   postgres:
-    image: postgres:16-alpine
+    image: postgres:16
     container_name: ordermanager-postgres
     environment:
       POSTGRES_USER: postgres
@@ -61,6 +57,8 @@ services:
       - "3000:3000"
     environment:
       NEXT_PUBLIC_API_URL: http://localhost:8080/api
+      NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: dgsb1shxa
+      NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET: video_kiemhang
 
 volumes:
   postgres_data:

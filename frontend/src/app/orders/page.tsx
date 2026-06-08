@@ -28,6 +28,7 @@ import { toast } from "sonner";
 const STATUS_LABELS: Record<OrderStatus, { label: string; variant: "default" | "secondary" | "destructive" | "outline" }> = {
     PENDING: { label: "Chờ gửi", variant: "outline" },
     PACKED: { label: "Đã đóng gói", variant: "secondary" }, // Legacy
+    SHIPPING: { label: "Đang giao", variant: "default" },
     COMPLETED: { label: "Đã đóng đơn", variant: "default" },
     CANCELLED: { label: "Đã xử lý (Hoàn)", variant: "destructive" },
     RETURNED: { label: "Đang hoàn", variant: "destructive" },
@@ -41,7 +42,7 @@ const EVAL_MAP: Record<ReturnEvaluation, { label: string; className: string }> =
 };
 
 // Group statuses for each tab
-const SHIPPING_STATUSES: OrderStatus[] = ["PENDING", "PACKED", "COMPLETED"];
+const SHIPPING_STATUSES: OrderStatus[] = ["PENDING", "PACKED", "SHIPPING", "COMPLETED"];
 const RETURN_STATUSES: OrderStatus[] = ["CANCELLED", "RETURNED", "RETURN_CHECKED"];
 
 type TabType = "shipping" | "returns";
@@ -354,7 +355,7 @@ export default function OrdersPage() {
                                 </div>
                                 {isAdmin && selectedOrder.predictionRisk !== null && (
                                     <div className="space-y-1">
-                                        <p className="text-muted-foreground">Dự đoán rủi ro AI</p>
+                                        <p className="text-muted-foreground">Dự đoán rủi ro</p>
                                         <Badge variant="outline" className={getRiskInfo(selectedOrder.predictionRisk)?.color}>
                                             {getRiskInfo(selectedOrder.predictionRisk)?.label} ({selectedOrder.predictionRisk?.toFixed(0)}%)
                                         </Badge>
@@ -518,7 +519,7 @@ export default function OrdersPage() {
                                         <TableHead>Mã vận đơn</TableHead>
                                         <TableHead>Khách hàng</TableHead>
                                         <TableHead>Sàn</TableHead>
-                                        {isAdmin && <TableHead>Rủi ro AI</TableHead>}
+                                        {isAdmin && <TableHead>Rủi ro</TableHead>}
                                         <TableHead>Trạng thái</TableHead>
                                         {isReturnTab && (
                                             <>

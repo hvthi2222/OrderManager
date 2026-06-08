@@ -124,7 +124,7 @@ export default function VideosPage() {
                                     <SelectItem value="ALL">Tất cả sàn</SelectItem>
                                     <SelectItem value="Shopee">Shopee</SelectItem>
                                     <SelectItem value="Lazada">Lazada</SelectItem>
-                                    <SelectItem value="TikTok">TikTok</SelectItem>
+                                    <SelectItem value="TikTok Shop">TikTok Shop</SelectItem>
                                     <SelectItem value="Other">Khác</SelectItem>
                                 </SelectContent>
                             </Select>

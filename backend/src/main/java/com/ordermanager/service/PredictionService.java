@@ -127,9 +127,10 @@ public class PredictionService {
         targetMap.clear();
         for (Object[] row : stats) {
             K key = (K) row[0];
+            if (key == null) continue;
             long total = (long) row[1];
             long failed = (long) row[2];
-            
+
             if (total > 0) {
                 double risk = (double) failed / total * 100;
                 targetMap.put(key, risk);
@@ -142,10 +143,11 @@ public class PredictionService {
         List<Object[]> stats = orderRepository.getRiskStatsByEmployee(failedStatuses, successStatuses);
         for (Object[] row : stats) {
             Long empId = (Long) row[0];
+            if (empId == null) continue;
             long total = (long) row[1];
             long failed = (long) row[2];
-            
-            if (total > MIN_EMPLOYEE_ORDERS) { // Chỉ tính rủi ro cho nhân viên có đủ mẫu
+
+            if (total > MIN_EMPLOYEE_ORDERS) {
                 double risk = (double) failed / total * 100;
                 employeeRiskMap.put(empId, risk);
             }

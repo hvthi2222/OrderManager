@@ -67,7 +67,6 @@ public class AppConfig {
                         .build();
                 userRepository.save(employee);
 
-                log.info("✅ Seed data created: admin/admin123, nhanvien1/123456");
             }
         };
     }

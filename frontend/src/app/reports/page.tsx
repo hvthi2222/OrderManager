@@ -118,10 +118,10 @@ export default function ReportsPage() {
                     {/* Summary cards */}
                     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                         {[
-                            { label: "Chờ gửi", value: summary?.totalPending || 0, color: "text-amber-600" },
+                            { label: "Chờ đóng hàng", value: summary?.totalPending || 0, color: "text-amber-600" },
                             { label: "Đơn đã đóng", value: summary?.totalCompleted || 0, color: "text-emerald-600" },
                             { label: "Đang hoàn", value: summary?.totalReturned || 0, color: "text-rose-600" },
-                            { label: "Đã xử lý", value: summary?.totalCancelled || 0, color: "text-red-600" },
+                            { label: "Đã hoàn", value: summary?.totalCancelled || 0, color: "text-red-600" },
                         ].map((s) => (
                             <Card key={s.label} className="border-0 shadow-sm">
                                 <CardContent className="p-4 text-center">

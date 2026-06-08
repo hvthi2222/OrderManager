@@ -1,5 +1,5 @@
 export type Role = "ADMIN" | "EMPLOYEE";
-export type OrderStatus = "PENDING" | "PACKED" | "COMPLETED" | "CANCELLED" | "RETURNED" | "RETURN_CHECKED";
+export type OrderStatus = "PENDING" | "PACKED" | "SHIPPING" | "COMPLETED" | "CANCELLED" | "RETURNED" | "RETURN_CHECKED";
 export type VideoType = "PACK" | "RETURN_CHECK";
 export type ImportSource = "MANUAL" | "FILE" | "API";
 

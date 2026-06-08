@@ -50,6 +50,15 @@ public class PackingService {
                     .build();
         }
 
+        if (order.getStatus() == OrderStatus.SHIPPING) {
+            return ScanResponse.builder()
+                    .valid(false)
+                    .alertType("ALREADY_SHIPPING")
+                    .alertMessage("Đơn hàng đang vận chuyển (SHIPPING), không thể quay video! Mã: " + trackingCode)
+                    .order(orderService.toResponse(order))
+                    .build();
+        }
+
         if (order.getStatus() == OrderStatus.RETURNED || order.getStatus() == OrderStatus.RETURN_CHECKED) {
             return ScanResponse.builder()
                     .valid(false)
